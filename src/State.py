@@ -24,7 +24,7 @@ class State(object):
 
     def __get_used_places(self, encoded_column: int):
         mask = (((1 << 9) - 1) ^ ((1 << 6) - 1))                    # mask = 111000000 in binary
-        return encoded_column & mask
+        return (encoded_column & mask) >> 6
 
     def __set_column(self, encoded_column, column_number):
         inv_mask = ((1 << 64) - 1) ^ self.__get_column_mask(column_number)
