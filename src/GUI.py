@@ -13,15 +13,15 @@ class GUI(object):
 
     def __init__(self):
         pygame.init()
-        icon = pygame.image.load("../icon.png")
+        icon = pygame.image.load("../assets/icon.png")
         pygame.display.set_icon(icon)
         pygame.display.set_caption("Connect Four")
         self.screen = pygame.display.set_mode((GUI.__WIDTH, GUI.__HEIGHT))
         self.screen.fill((255, 255, 255))
 
-        self.board_surface = pygame.image.load("../Connect4_Board_transparent.png")
-        self.red_chip_surface = pygame.image.load("../ChipRed.png")
-        self.yellow_chip_surface = pygame.image.load("../ChipYellow.png")
+        self.board_surface = pygame.image.load("../assets/Connect4_Board_transparent.png")
+        self.red_chip_surface = pygame.image.load("../assets/ChipRed.png")
+        self.yellow_chip_surface = pygame.image.load("../assets/ChipYellow.png")
 
         self.red_chip_surface = pygame.transform.scale(self.red_chip_surface, (60, 60))
         self.yellow_chip_surface = pygame.transform.scale(self.yellow_chip_surface, (60, 60))
