@@ -29,10 +29,11 @@ class Controller(object):
         game_done: bool = False
         while not game_done:
             column_number = self.get_user_move()
-            self.current_state.add_chip(column_number)
-            print(self.current_state.get_board())
-            self.GUI.display_grid(self.current_state.get_board(), column_number)
-            game_done = self.check_game_done()
+
+            if self.current_state.can_play(column_number):
+                self.current_state.add_chip(column_number)
+                self.GUI.display_grid(self.current_state.get_board(), column_number, animate=True)
+                game_done = self.check_game_done()
 
 
 if __name__ == "__main__":

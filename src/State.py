@@ -20,7 +20,7 @@ class State(object):
         return ((1 << (9 * (column_number + 1))) - 1) ^ ((1 << (9 * column_number)) - 1)
 
     def __get_column(self, column_number: int) -> int:
-        return self.__grid & self.__get_column_mask(column_number)  # Needed 9 bits of column
+        return (self.__grid & self.__get_column_mask(column_number)) >> (9 * column_number)  # Needed 9 bits of column
 
     def __get_used_places(self, encoded_column: int):
         mask = (((1 << 9) - 1) ^ ((1 << 6) - 1))                    # mask = 111000000 in binary
@@ -37,7 +37,7 @@ class State(object):
         used_places += 1
 
         pw2 = 2  # This is only the exponent (0, 1, 2), not 2^pw (1, 2, 4)
-        while used_places > 0:
+        while pw2 >= 0:
             if used_places >= (1 << pw2):
                 # the added 6 because the used_places are bits (8,7,6) in each column
                 encoded_column |= (1 << (6 + pw2))                      # Set the bit
@@ -63,7 +63,7 @@ class State(object):
                     decoded_column.append(2)
         return decoded_column
 
-    def __can_play(self, column_number: int) -> bool:
+    def can_play(self, column_number: int) -> bool:
         encoded_column = self.__get_column(column_number)
         used_places = self.__get_used_places(encoded_column)
         return used_places < 6
@@ -85,7 +85,7 @@ class State(object):
     def get_successor(self) -> list:
         successors = []
         for i in range(7):
-            if self.__can_play(i):
+            if self.can_play(i):
                 successor = deepcopy(self)
                 successor.add_chip(i)
                 successors.append(successor)
