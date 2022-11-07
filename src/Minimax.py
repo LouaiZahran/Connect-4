@@ -6,8 +6,16 @@ class Minimax(object):
 
     def get_best_move(self, current_state: State, depth: int) -> int:
         best_index=self.__max_function(current_state,depth) [1]
-        
-        return best_index
+
+        board1 = current_state.get_board()
+        board2 = current_state.get_successor()[best_index]
+
+        for i in range(0,7):
+            j=0
+            while board1[j][i] !=0 and j<6:
+                j+=1
+            if j<6 and board2[j][i] !=0:
+                return i
 
     @abc.abstractmethod
     def __min_function(self, state, maxDepth): pass

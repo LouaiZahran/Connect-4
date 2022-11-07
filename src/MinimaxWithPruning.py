@@ -20,7 +20,7 @@ class MinimaxWithPruning(Minimax):
 
         states = state.get_successor()
         if len(states) == 0:
-            return self.__heuristic.get_score(state)
+            return self.__heuristic.get_score(state), best_index
         minV = math.inf
         i = 0
         for curr_state in states:
@@ -36,11 +36,11 @@ class MinimaxWithPruning(Minimax):
 
     def __max_function_alpha_beta_util(self, state, best_index, alpha, beta, maxDepth):
         if maxDepth <= 0:
-            return self.__heuristic.get_score(state)
+            return self.__heuristic.get_score(state), best_index
 
         states = state.get_successor()
         if len(states) == 0:
-            return self.__heuristic.get_score(state)
+            return self.__heuristic.get_score(state), best_index
         maxV = -math.inf
         i = 0
         for curr_state in states:

@@ -21,7 +21,7 @@ class MinimaxWithoutPruning(Minimax):
 
         states = state.get_successor()
         if len(states) == 0:
-            return self.__heuristic.get_score(state)
+            return self.__heuristic.get_score(state), best_index
         minV = math.inf
         i = 0
         for curr_state in states:
@@ -39,7 +39,7 @@ class MinimaxWithoutPruning(Minimax):
 
         states = state.get_successor()
         if len(states) == 0:
-            return self.__heuristic.get_score(state)
+            return self.__heuristic.get_score(state) , best_index
         maxV = -math.inf
         i = 0
         for curr_state in states:
