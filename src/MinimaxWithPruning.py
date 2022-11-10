@@ -9,10 +9,10 @@ class MinimaxWithPruning(Minimax):
         self.__heuristic: Heuristic = heuristic
 
     def __min_function(self, state, maxDepth):
-        self.__min_function_alpha_beta_util(state, -1, -math.inf, math.inf, maxDepth)
+        return self.__min_function_alpha_beta_util(state, -1, -math.inf, math.inf, maxDepth)
 
     def __max_function(self, state, maxDepth):
-        self.__max_function_alpha_beta_util(state, -1, -math.inf, math.inf, maxDepth)
+        return self.__max_function_alpha_beta_util(state, -1, -math.inf, math.inf, maxDepth)
 
     def __min_function_alpha_beta_util(self, state, best_index, alpha, beta, maxDepth):
         if maxDepth <= 0:
@@ -54,5 +54,3 @@ class MinimaxWithPruning(Minimax):
                 return maxV, best_index
 
         return maxV, best_index
-
-    pass
