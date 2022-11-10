@@ -1,5 +1,6 @@
 import math
-from . import State, Heuristic
+from . import Heuristic
+from . import State
 
 
 class Heuristic1(Heuristic):
@@ -7,127 +8,110 @@ class Heuristic1(Heuristic):
 
     def get_score(self, current_state: State):
         board = current_state.get_board()
-        result: int = self.__get_single_chips(board) + self.__get_two_chips(board) + \
-                      self.__get_three_chips(board) + self.__get_three_chips(board)
-        return result
-
-    def __get_single_chips(self, board: list) -> int:
-        result: int = 0
-        for j in range(7):
-            for i in range(6):
-                if board[i][j] == 0:
-                    break
-                result += self.__calc_single_chip(board[i][j], i, j)
-        return result
-
-    def __calc_single_chip(self, player: int, i: int, j: int) -> int:
-        if j == 0 or j == 6:
-            if i == 0 or i == 5:
-                value = 24
-            elif i == 1 or i == 4:
-                value = 32
-            else:
-                value = 40
-        elif j == 1 or j == 5:
-            if i == 0 or i == 5:
-                value = 35
-            elif i == 1 or i == 4:
-                value = 53
-            else:
-                value = 70
-        elif j == 2 or j == 4:
-            if i == 0 or i == 5:
-                value = 55
-            elif i == 1 or i == 4:
-                value = 87
-            else:
-                value = 120
-        else:
-            if i == 0 or i == 5:
-                value = 108
-            elif i == 1 or i == 4:
-                value = 154
-            else:
-                value = 200
-        if player == 1:
-            return -value
-        return value
-
-    def __get_two_chips(self, board: list) -> int:
         result: int = 0
         for i in range(6):
-            for j in range(6):
-                if board[i][j] == 0:
-                    continue
-                if board[i][j] == board[i][j + 1]:
-                    empty_spaces = 0
-                    k = j - 1
-                    while k >= 0 and board[i][k] == 0:
-                        empty_spaces += 1
-                        k -= 1
-                    k = j + 2
-                    while k < 7 and board[i][k] == 0:
-                        empty_spaces += 1
-                        k += 1
-                    result += self.__calc_two_chips(board[i][j], empty_spaces)
-        for j in range(7):
-            for i in range(3):
-                if board[i][j] == 0:
+            j = 0
+            while j < 7:
+                empty_before = 0
+                while j < 7 and board[i][j] == 0:
+                    empty_before += 1
+                    j += 1
+                if empty_before == 7:
                     break
-                if board[i][j] == board[i + 1][j]:
-                    empty_spaces = 0
-                    for k in range(i + 2, 6):
-                        if board[k][j] != 0:
-                            break
-                        empty_spaces += 1
-                    result += self.__calc_two_chips(board[i][j], empty_spaces)
-        for i in range(5):
-            for j in range(6):
-                if board[i][j] == 0:
-                    break
-                if board[i][j] == board[i + 1][j + 1]:
-                    r, c = i - 1, j - 1
-                    empty_spaces = 0
-                    while r >= 0 and c >= 0 and board[r][c] == 0:
-                        empty_spaces += 1
-                        r -= 1
-                        c -= 1
-                    r, c = i + 2, j + 2
-                    while r < 6 and c < 7 and board[r][c] == 0:
-                        empty_spaces += 1
-                        r += 1
-                        c += 1
+                if j < 7:
+                    first_group = 0
+                    player = board[i][j]
+                    player_j = j
+                    while j < 7 and board[i][j] == player:
+                        first_group += 1
+                        j += 1
+                    if j < 7 and board[i][j] != 0:  # if the opponent is in my road, stop
+                        result += self.__sum_result(player, self.__calc_group(player, player_j, empty_before,
+                                                                              first_group, 0, 0))
+                        break  # start new grouping
+                    empty_between = 0
+                    while j < 7 and board[i][j] == 0:
+                        empty_between += 1
+                        j += 1
+                    if empty_between > 1 or (j < 7 and board[i][j] ^ player == 3):  # check
+                        result += self.__sum_result(player, self.__calc_group(player, player_j, empty_before,
+                                                                              first_group, empty_between, 0))
+                        break
+                    second_group = 0
+                    while j < 7 and board[i][j] == player:
+                        second_group += 1
+                        j += 1
+                    if first_group == 1 and second_group == 1:
+                        result += self.__sum_result(player,
+                                                    self.__calc_single_chip(player, j, empty_before + empty_between))
+                        j -= 1
+                        break
+                    else:
+                        result += self.__sum_result(player, self.__calc_group(player, player_j, empty_before,
+                                                                              first_group, empty_between, second_group))
+        return result
 
-                    result += self.__calc_two_chips(board[i][j], empty_spaces)
-            for j in range(6, 0, -1):
-                if board[i][j] == 0:
-                    break
-                if board[i][j] == board[i + 1][j - 1]:
-                    r, c = i - 1, j + 1
-                    empty_spaces = 0
-                    while r >= 0 and c < 6 and board[r][c] == 0:
-                        empty_spaces += 1
-                        r -= 1
-                        c += 1
-                    r, c = i + 2, j - 2
-                    while r < 6 and c >= 0 and board[r][c] == 0:
-                        empty_spaces += 1
-                        r += 1
-                        c -= 1
-                    result += self.__calc_two_chips(board[i][j], empty_spaces)
+    def __calc_group(self, player, j, empty_before, first_group, empty_between, second_group):
+        result: int = 0
+        empty_spaces = empty_before + empty_between
+        if first_group == 1 and second_group == 0:  # single chip
+            result += self.__calc_single_chip(player, j, empty_spaces)
+        elif first_group == 2 and second_group == 0:  # Two chips
+            result += self.__calc_two_chips(player, empty_spaces)
+        elif first_group <= 3 or second_group <= 3:  # Three chips
+            result += self.__calc_three_chips(player, empty_before, first_group, empty_between, second_group)
+        else:  # Four or more chips
+            result += self.__calc_more_than_three_chips(player, empty_before, first_group, empty_between, second_group)
+        return self.__sum_result(player, result)
+
+    def __calc_single_chip(self, player: int, j: int, empty_spaces) -> int:
+        if empty_spaces < 3:
+            return 0
+        if j == 0 or j == 6:
+            result = 40
+        elif j == 1 or j == 5:
+            result = 70
+        elif j == 2 or j == 4:
+            result = 120
+        else:
+            result = 200
         return result
 
     def __calc_two_chips(self, player: int, empty_spaces: int):
+        if empty_spaces < 2:
+            return 0
+        return (empty_spaces - 1) * 10000
+
+    def __calc_three_chips(self, player, empty_before, first_group, empty_between, second_group):
         result: int = 0
-        if empty_spaces > 1:
-            if player == 1:
-                result -= (empty_spaces - 1) * 10000
-            else:
-                result += (empty_spaces - 1) * 10000
+        empty_spaces = empty_before + empty_between
+        if first_group + second_group + empty_spaces <= 3:
+            return 0
+        if first_group == 3 and empty_before >= 1 and empty_between >= 1:  # unstoppable case
+            result += self.__max_value
+        elif empty_between == 1:
+            result += 900000
         return result
 
-    def __get_three_chips(self):
-        return 0  # to be implemented
+    def __calc_more_than_three_chips(self, player, empty_before, first_group, empty_between, second_group):
+        result: int = 0
+        if first_group >= 4 and empty_before >= 1 and empty_between >= 1:  # unstoppable case
+            result += (first_group - 2) * self.__max_value
+        elif first_group >= 4:
+            result += (first_group - 3) * self.__max_value
+        if second_group >= 4:
+            result += (second_group - 3) * self.__max_value
+        if empty_between == 1:
+            temp = first_group + second_group - 2
+            if first_group >= 4:
+                temp -= (first_group - 3)
+            if second_group >= 4:
+                temp -= (second_group - 3)
+            if temp > 0:
+                result += temp * 900000
+        return result
 
-    def __get_four_chips(self):
-        return 0  # to be implemented
+    def __sum_result(self, player, result):
+        if player == 1:
+            return -result
+        return result
