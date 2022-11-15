@@ -26,7 +26,7 @@ class MinimaxWithPruning(Minimax):
         minV = math.inf
         i = 0
         for curr_state in states:
-            v = self.__max_function_alpha_beta_util(curr_state, best_index, alpha, beta, maxDepth - 1)
+            v,i,root = self.__max_function_alpha_beta_util(curr_state, best_index, alpha, beta, maxDepth - 1)
             root.add_child(v)
             if v < minV:
                 minV = v
@@ -47,7 +47,7 @@ class MinimaxWithPruning(Minimax):
         maxV = -math.inf
         i = 0
         for curr_state in states:
-            v = self.__min_function_alpha_beta_util(curr_state, best_index, alpha, beta, maxDepth - 1)
+            v,i,root = self.__min_function_alpha_beta_util(curr_state, best_index, alpha, beta, maxDepth - 1)
             root.add_child(v)
             if maxV > v:
                 maxV = v

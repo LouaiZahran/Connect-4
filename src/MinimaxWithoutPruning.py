@@ -2,7 +2,6 @@ import math
 
 from . import Minimax
 from . import Heuristic
-from . import Tree
 
 
 class MinimaxWithoutPruning(Minimax):
@@ -27,7 +26,7 @@ class MinimaxWithoutPruning(Minimax):
         minV = math.inf
         i = 0
         for curr_state in states:
-            v = self.__max_function_util(curr_state,best_index, maxDepth - 1,root)
+            v, i, root = self.__max_function_util(curr_state,best_index, maxDepth - 1,root)
             root.add_child(v)
             if v < minV:
                 minV = v
@@ -46,7 +45,7 @@ class MinimaxWithoutPruning(Minimax):
         maxV = -math.inf
         i = 0
         for curr_state in states:
-            v = self.__min_function_util(curr_state,best_index, maxDepth - 1,root)
+            v,i,root = self.__min_function_util(curr_state,best_index, maxDepth - 1,root)
             root.add_child(v)
             if maxV > v:
                 maxV = v
