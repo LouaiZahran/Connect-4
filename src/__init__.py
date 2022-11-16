@@ -1,4 +1,4 @@
-__all__ = ["Minimax", "GUI", "Heuristic", "Agent", "State", "MinimaxWithoutPruning.py", "MinimaxWithPruning.py", "Controller", "Heuristic1", "Heuristic2", "TreePrinting"]
+__all__ = ["Minimax", "GUI", "Heuristic", "Agent", "State", "MinimaxWithoutPruning", "MinimaxWithPruning", "Controller", "Heuristic1", "Heuristic2", "TreePrinting"]
 
 from .Minimax import Minimax
 from .GUI import GUI
