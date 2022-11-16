@@ -2,6 +2,7 @@ import math
 
 from . import Minimax
 from . import Heuristic
+from .Tree import Node
 
 
 class MinimaxWithoutPruning(Minimax):
@@ -9,11 +10,11 @@ class MinimaxWithoutPruning(Minimax):
         self.__heuristic: Heuristic = heuristic
 
     def __min_function(self, state, maxDepth):
-        root=Tree(self.__heuristic.get_score(state))
+        root=Node(self.__heuristic.get_score(state))
         return self.__min_function_util(state, -1, maxDepth,root)
 
     def __max_function(self, state, maxDepth):
-        root=Tree(self.__heuristic.get_score(state))
+        root=Node(self.__heuristic.get_score(state))
         return self.__max_function_util(state, -1, maxDepth,root)
 
     def __min_function_util(self, state, best_index, maxDepth,root):
@@ -27,7 +28,7 @@ class MinimaxWithoutPruning(Minimax):
         i = 0
         for curr_state in states:
             v, i, root = self.__max_function_util(curr_state,best_index, maxDepth - 1,root)
-            root.add_child(v)
+            root.add_successor(v)
             if v < minV:
                 minV = v
                 best_index = i
@@ -46,7 +47,7 @@ class MinimaxWithoutPruning(Minimax):
         i = 0
         for curr_state in states:
             v,i,root = self.__min_function_util(curr_state,best_index, maxDepth - 1,root)
-            root.add_child(v)
+            root.add_successor(v)
             if maxV > v:
                 maxV = v
                 best_index = i
