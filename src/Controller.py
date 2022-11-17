@@ -13,6 +13,7 @@ class Controller(object):
         self.current_turn = True
         self.Heuristic = self.take_heuristic()
         self.Minimax = self.take_minimax(self.Heuristic)
+        self.max_depth = self.take_max_depth()
         self.GUI = GUI()
         self.TreePrinting = TreePrinting()
 
@@ -40,6 +41,15 @@ class Controller(object):
         else:
             return MinimaxWithoutPruning(heuristic)
 
+    def take_max_depth(self):
+        inp = easygui.enterbox(
+            "Enter the max depth of the minimax tree",
+            "Depth Selector"
+        )
+
+        max_depth = int(inp)
+        return max_depth
+
     def get_options(self):
         raise NotImplementedError
 
@@ -61,7 +71,7 @@ class Controller(object):
         return self.GUI.take_input()
 
     def get_agent_move(self):
-        return self.Minimax.get_best_move(self.current_state, 3)
+        return self.Minimax.get_best_move(self.current_state, self.max_depth)
 
     def check_game_done(self):
         for column in range(7):

@@ -79,11 +79,3 @@ class GUI(object):
                     for i in range(7):
                         if self.columns[i].collidepoint(x, y):
                             return i
-
-
-
-
-
-
-
-
