@@ -4,13 +4,16 @@ from src.MinimaxWithPruning import MinimaxWithPruning
 from src.MinimaxWithoutPruning import MinimaxWithoutPruning
 from src.Heuristic1 import Heuristic1
 from src.Heuristic2 import Heuristic2
+from src.final_score import final_score
 import easygui
+
 
 class Controller(object):
 
     def __init__(self):
         self.current_state = State()
         self.current_turn = True
+        self.scorer = final_score()
         self.Heuristic = self.take_heuristic()
         self.Minimax = self.take_minimax(self.Heuristic)
         self.max_depth = self.take_max_depth()
@@ -65,7 +68,8 @@ class Controller(object):
 
         self.current_turn = not self.current_turn
         self.current_state.add_chip(column_number)
-        self.GUI.display_grid(self.current_state.get_board(), column_number, animate=True)
+        player_score = self.scorer.get_final_score(self.current_state)
+        self.GUI.display_grid(self.current_state.get_board(), column_number, animate=True, player_score=player_score, ai_score=player_score)
 
     def get_user_move(self):
         return self.GUI.take_input()
@@ -78,7 +82,6 @@ class Controller(object):
             if self.current_state.can_play(column):
                 return False
         return True
-
 
     def start(self):
         game_done: bool = False

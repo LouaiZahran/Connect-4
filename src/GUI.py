@@ -27,6 +27,10 @@ class GUI(object):
         self.yellow_chip_surface = pygame.transform.scale(self.yellow_chip_surface, (60, 60))
         # self.board_surface = pygame.transform.scale(self.board_surface, (GUI.__WIDTH, GUI.__HEIGHT))
 
+        self.labels_font = pygame.font.SysFont("arial", 20)
+        self.player_score_label = self.labels_font.render("Player score: ", True, (0, 0, 0))
+        self.ai_score_label = self.labels_font.render("AI score: ", True, (0, 0, 0))
+
         self.screen.blit(self.board_surface, (0, 0))
 
         self.columns = []
@@ -60,12 +64,25 @@ class GUI(object):
 
         below[column_number] += 1
 
-    def display_grid(self, board, added_chip_column, animate):
+    def display_grid(self, board, added_chip_column, animate, player_score, ai_score):
         below = [0 for i in range(7)]
         for row in range(6):
             for col in range(7):
                 if board[row][col] != 0:
                     self.add_chip(col, board[row][col], below, animate and col == added_chip_column and (row == 5 or board[row + 1][col] == 0))
+        self.display_score(player_score, ai_score)
+
+    def display_score(self, player_score, ai_score):
+        self.player_score_label = self.labels_font.render("Player Score: " + str(player_score), True, (0, 0, 0))
+        self.ai_score_label = self.labels_font.render("AI Score: " + str(ai_score), True, (0, 0, 0))
+
+        # Erase previous score
+        self.screen.blit(self.board_surface, (0, 0))
+
+        # Render new score
+        self.screen.blit(self.player_score_label, (30, 8))
+        self.screen.blit(self.ai_score_label, (500, 8))
+        pygame.display.update()
 
     def take_input(self):
         while True:
