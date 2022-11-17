@@ -67,7 +67,10 @@ class Heuristic1(Heuristic):
                 while i < 6 and board[i][j] == player:
                     first_group += 1
                     i += 1
-                result += self.__calc_group(player, j, 0, first_group, 0, 0)
+                if i < 6 and board[i][j] == 0:
+                    result += self.__calc_group(player, j, 0, first_group, 6 - i, 0)
+                else:
+                    result += self.__calc_group(player, j, 0, first_group, 0, 0)
         return result
 
     def __get_score_of_diagonals(self, board):
