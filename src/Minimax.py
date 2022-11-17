@@ -8,11 +8,10 @@ import abc
 class Minimax(object):
 
     def get_best_move(self, current_state: State, depth: int) -> tuple[int, Any]:
-        result = self.__max_function(current_state, depth)
+        result, root = self.__max_function(current_state, depth)
         best_index=result[1]
-        root=result[2]
         board1 = current_state.get_board()
-        board2 = current_state.get_successor()[best_index]
+        board2 = current_state.get_successor()[best_index].get_board()
 
         for i in range(7):
             j = 0

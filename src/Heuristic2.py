@@ -3,6 +3,11 @@ from . import State
 
 
 class Heuristic2(Heuristic):
+
+    def __int__(self):
+        pass
+
+
     def get_score(self, current_state: State):
         board = current_state.get_board()
         result: int = 0
