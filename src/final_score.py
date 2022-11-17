@@ -16,7 +16,7 @@ class final_score(object):
         for i in range(6):
             j = 0
             while j < 4:
-                if board[i][j] == 0:
+                if board[i][j] != player:
                     j += 1
                     continue
                 count = 0
@@ -33,6 +33,9 @@ class final_score(object):
             while i < 3:
                 if board[i][j] == 0:
                     break
+                if board[i][j] ^ player == 3:
+                    i += 1
+                    continue
                 count = 0
                 while i < 6 and player == board[i][j]:
                     count += 1
@@ -51,7 +54,7 @@ class final_score(object):
         for k in range(1, 4):
             i, j = 0, k
             while j < 4:
-                if board[i][j] == 0:
+                if board[i][j] != player:
                     i += 1
                     j += 1
                     continue
@@ -68,7 +71,7 @@ class final_score(object):
         for k in range(3):
             i, j = k, 0
             while i < 3:
-                if board[i][j] == 0:
+                if board[i][j] != player:
                     i += 1
                     j += 1
                     continue
@@ -85,7 +88,7 @@ class final_score(object):
         for k in range(3, 6):
             i, j = k, 0
             while i > 2:
-                if board[i][j] == 0:
+                if board[i][j] != player:
                     i -= 1
                     j += 1
                     continue
@@ -102,7 +105,7 @@ class final_score(object):
         for k in range(1, 4):
             i, j = 5, k
             while j < 4:
-                if board[i][j] == 0:
+                if board[i][j] != player:
                     i -= 1
                     j += 1
                     continue
