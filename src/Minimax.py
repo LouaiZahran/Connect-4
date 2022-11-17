@@ -1,7 +1,6 @@
 from typing import Tuple, Any
 
 from . import State
-from .Tree import Node
 import abc
 
 

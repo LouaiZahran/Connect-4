@@ -1,5 +1,4 @@
 from PIL import Image
-from Tree import *
 import pydot
 
 
@@ -35,9 +34,9 @@ class TreePrinting:
                 edge = pydot.Edge(hash(node), hash(child))
                 graph.add_edge(edge)
 
-        graph.write_png('../assets/test.png')
-        img = Image.open('../assets/test.png')
-        img.show()
+        # graph.write_png('../assets/test.png')
+        # img = Image.open('../assets/test.png')
+        # img.show()
 
 # data to test the tree printer
 # root = Node(Node(1))
