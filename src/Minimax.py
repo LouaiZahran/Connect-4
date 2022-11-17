@@ -19,7 +19,7 @@ class Minimax(object):
 
         for i in range(7):
             j = 0
-            while board1[j][i] != 0 and j < 6:
+            while  j < 6 and board1[j][i] != 0:
                 j += 1
             if j < 6 and board2[j][i] != 0:
                 return i, root
