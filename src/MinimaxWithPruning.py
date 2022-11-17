@@ -11,57 +11,57 @@ class MinimaxWithPruning(Minimax):
 
     def _Minimax__min_function(self, state, maxDepth):
         root = Node(self.__heuristic.get_score(state))
-        return self.__min_function_alpha_beta_util(state, -1, -math.inf, math.inf, maxDepth, root), root
-
+        result = self.__min_function_alpha_beta_util(state, -math.inf, math.inf, maxDepth, root)
+        best_index = self.best_index(root.get_successor())
+        return result, best_index, root
     def _Minimax__max_function(self, state, maxDepth):
         root = Node(self.__heuristic.get_score(state))
-        return self.__max_function_alpha_beta_util(state, -1, -math.inf, math.inf, maxDepth, root), root
-
-    def __min_function_alpha_beta_util(self, state, best_index, alpha, beta, maxDepth, root):
+        result = self.__max_function_alpha_beta_util(state, -math.inf, math.inf, maxDepth, root)
+        best_index = self.best_index(root.get_successor())
+        return result, best_index, root
+    def __min_function_alpha_beta_util(self, state, alpha, beta, maxDepth, root):
         if maxDepth <= 0:
-            return self.__heuristic.get_score(state), best_index
+            return self.__heuristic.get_score(state)
 
         states = state.get_successor()
         if len(states) == 0:
-            return self.__heuristic.get_score(state), best_index
-        minV = math.inf
+            return self.__heuristic.get_score(state)
+        root.value = math.inf
         i = 0
         for curr_state in states:
             child = Node(-1)
             root.add_successor(child)
-            v, i = self.__max_function_alpha_beta_util(curr_state, best_index, alpha, beta, maxDepth - 1)
-            child.value=v
-            if v < minV:
-                minV = v
-                best_index = i
-            beta = min(beta, minV)
-            root.value=minV
-            if (beta <= alpha):
-                return minV, best_index
-
-        return minV, best_index
-
-    def __max_function_alpha_beta_util(self, state, best_index, alpha, beta, maxDepth, root):
-        if maxDepth <= 0:
-            return self.__heuristic.get_score(state), best_index
-
-        states = state.get_successor()
-        if len(states) == 0:
-            return self.__heuristic.get_score(state), best_index
-        maxV = -math.inf
-        i = 0
-        for curr_state in states:
-            child = Node(-1)
-            root.add_successor(child)
-            v, i = self.__min_function_alpha_beta_util(curr_state, best_index, alpha, beta, maxDepth - 1)
-            child.value=v
-            if v > maxV:
-                maxV = v
-                best_index = i
-            i += 1
-            alpha = max(alpha, maxV)
-            root.value=maxV
+            child.value = self.__max_function_alpha_beta_util(curr_state, alpha, beta, maxDepth - 1, child)
+            # if v < minV:
+            #     minV = v
+            #     best_index = i
+            root.value = min(root.value, child.value)
+            beta = min(beta, child.value)
             if beta <= alpha:
-                return maxV, best_index
+                return root.value
 
-        return maxV, best_index
+        return root.value
+
+    def __max_function_alpha_beta_util(self, state, alpha, beta, maxDepth, root):
+        if maxDepth <= 0:
+            return self.__heuristic.get_score(state)
+
+        states = state.get_successor()
+        if len(states) == 0:
+            return self.__heuristic.get_score(state)
+        root.value = -math.inf
+        # i = 0
+        for curr_state in states:
+            child = Node(-1)
+            root.add_successor(child)
+            child.value = self.__min_function_alpha_beta_util(curr_state, alpha, beta, maxDepth - 1, child)
+            # if v > maxV:
+            #     maxV = v
+            #     best_index = i
+            # i += 1
+            root.value = max(root.value, child.value)
+            alpha = max(alpha, child.value)
+            if beta <= alpha:
+                return root.value
+
+        return root.value

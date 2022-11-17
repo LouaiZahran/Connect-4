@@ -7,9 +7,14 @@ import abc
 
 class Minimax(object):
 
+    def best_index(self, children):
+        best_index = 0
+        for i in range(len(children)):
+            if children[i].value > children[best_index].value:
+                best_index = i
+        return best_index
     def get_best_move(self, current_state: State, depth: int) -> tuple[int, Any]:
-        result, root = self.__max_function(current_state, depth)
-        best_index=result[1]
+        result, best_index, root = self.__max_function(current_state, depth)
         board1 = current_state.get_board()
         board2 = current_state.get_successor()[best_index].get_board()
 
