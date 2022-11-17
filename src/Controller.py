@@ -68,8 +68,8 @@ class Controller(object):
 
         self.current_turn = not self.current_turn
         self.current_state.add_chip(column_number)
-        player_score = self.scorer.get_final_score(self.current_state)
-        self.GUI.display_grid(self.current_state.get_board(), column_number, animate=True, player_score=player_score, ai_score=player_score)
+        player_score, ai_score = self.scorer.get_final_score(self.current_state)
+        self.GUI.display_grid(self.current_state.get_board(), column_number, animate=True, player_score=player_score, ai_score=ai_score)
 
     def get_user_move(self):
         return self.GUI.take_input()

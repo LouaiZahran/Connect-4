@@ -40,7 +40,7 @@ class GUI(object):
 
         pygame.display.update()
 
-    def add_chip(self, column_number, turn, below, animate):
+    def add_chip(self, column_number, turn, below, animate, player_score, ai_score):
         surface = self.red_chip_surface if turn & 1 == 1 else self.yellow_chip_surface
 
         if animate:
@@ -51,7 +51,7 @@ class GUI(object):
                 self.screen.blit(surface,
                                  (column_number * (GUI.__SPACE_SIZE + GUI.__CIRCLE_SIZE) + GUI.__SPACE_SIZE,
                                   current_y))
-                self.screen.blit(self.board_surface, (0, 0))
+                self.display_score(player_score, ai_score)
                 pygame.display.update()
                 current_y += GUI.__CHIP_SPEED
             self.screen.blit(previous_screen, (0, 0))
@@ -60,6 +60,7 @@ class GUI(object):
                          (column_number * (GUI.__SPACE_SIZE + GUI.__CIRCLE_SIZE) + GUI.__SPACE_SIZE,
                           GUI.__HEIGHT - (below[column_number] + 1) * (GUI.__SPACE_SIZE + GUI.__CIRCLE_SIZE)))
         self.screen.blit(self.board_surface, (0, 0))
+
         pygame.display.update()
 
         below[column_number] += 1
@@ -69,8 +70,9 @@ class GUI(object):
         for row in range(6):
             for col in range(7):
                 if board[row][col] != 0:
-                    self.add_chip(col, board[row][col], below, animate and col == added_chip_column and (row == 5 or board[row + 1][col] == 0))
+                    self.add_chip(col, board[row][col], below, animate and col == added_chip_column and (row == 5 or board[row + 1][col] == 0), player_score, ai_score)
         self.display_score(player_score, ai_score)
+        pygame.display.update()
 
     def display_score(self, player_score, ai_score):
         self.player_score_label = self.labels_font.render("Player Score: " + str(player_score), True, (0, 0, 0))
@@ -82,7 +84,6 @@ class GUI(object):
         # Render new score
         self.screen.blit(self.player_score_label, (30, 8))
         self.screen.blit(self.ai_score_label, (500, 8))
-        pygame.display.update()
 
     def take_input(self):
         while True:
