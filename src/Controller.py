@@ -18,7 +18,7 @@ class Controller(object):
         self.Minimax = self.take_minimax(self.Heuristic)
         self.max_depth = self.take_max_depth()
         self.GUI = GUI()
-        self.TreePrinting = TreePrinting()
+        # self.TreePrinting = TreePrinting()
 
     def take_heuristic(self):
         inp = easygui.buttonbox(
@@ -63,8 +63,8 @@ class Controller(object):
         else:
             agent = self.get_agent_move()
             column_number = agent[0]
-            self.TreePrinting.print_tree_console(agent[1])
-            self.TreePrinting.print_tree_gui(agent[1])
+            # self.TreePrinting.print_tree_console(agent[1])
+            # self.TreePrinting.print_tree_gui(agent[1])
 
         self.current_turn = not self.current_turn
         self.current_state.add_chip(column_number)
