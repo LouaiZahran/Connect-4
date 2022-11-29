@@ -70,7 +70,7 @@ class Controller(object):
             column_number = agent[0]
             self.TreePrinting.print_tree_console(agent[1])
             self.TreePrinting.print_count()
-            # self.TreePrinting.print_tree_gui(agent[1])
+            self.TreePrinting.print_tree_gui(agent[1])
 
         self.current_turn = not self.current_turn
         self.current_state.add_chip(column_number)

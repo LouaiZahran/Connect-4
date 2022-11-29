@@ -27,17 +27,14 @@ class MinimaxWithPruning(Minimax):
         if len(states) == 0:
             return self.__heuristic.get_score(state)
         root.value = math.inf
-        i = 0
         for curr_state in states:
             child = Node(-1)
             root.add_successor(child)
             child.value = self.__max_function_alpha_beta_util(curr_state, alpha, beta, maxDepth - 1, child)
-            # if v < minV:
-            #     minV = v
-            #     best_index = i
             root.value = min(root.value, child.value)
             beta = min(beta, child.value)
             if beta <= alpha:
+                root.pruned = True
                 return root.value
 
         return root.value
@@ -50,18 +47,14 @@ class MinimaxWithPruning(Minimax):
         if len(states) == 0:
             return self.__heuristic.get_score(state)
         root.value = -math.inf
-        # i = 0
         for curr_state in states:
             child = Node(-1)
             root.add_successor(child)
             child.value = self.__min_function_alpha_beta_util(curr_state, alpha, beta, maxDepth - 1, child)
-            # if v > maxV:
-            #     maxV = v
-            #     best_index = i
-            # i += 1
             root.value = max(root.value, child.value)
             alpha = max(alpha, child.value)
             if beta <= alpha:
+                root.pruned = True
                 return root.value
 
         return root.value

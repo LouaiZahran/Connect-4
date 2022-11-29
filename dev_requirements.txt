@@ -1,4 +1,7 @@
-Pillow
-pydot
+Pillow==9.3.0
+easygui==0.98.3
+pip==22.3.1
+pydot==1.4.2
 pygame
-easygui
+pyparsing==3.0.9
+setuptools==65.6.3

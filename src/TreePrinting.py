@@ -23,7 +23,7 @@ class TreePrinting:
         graph = pydot.Dot('my_graph', graph_type='graph', bgcolor='white')
         stack = [[root, 1]]
         shapes = ['trapezium', 'invtrapezium', 'square']
-        colors = ['green', 'red', 'Yellow']
+        colors = ['green', 'blue', 'Yellow']
         graph.add_node(pydot.Node(hash(root), label=root.get_value(), shape=shapes[0], style="filled",
                                   fillcolor=colors[0]))
         while len(stack) > 0:
@@ -31,15 +31,22 @@ class TreePrinting:
             children = node.get_successor()
             for child in children:
                 stack.append([child, 1 if shape_index == 0 else 0])
+                if child.is_pruned():
+                    color = 'red'
+                else:
+                    color = colors[(2 if child.is_leaf() else shape_index)]
+
                 graph.add_node(pydot.Node(hash(child), label=child.get_value(),
                                           shape=shapes[(2 if child.is_leaf() else shape_index)], style="filled",
-                                          fillcolor=colors[(2 if child.is_leaf() else shape_index)]))
-                edge = pydot.Edge(hash(node), hash(child))
+                                          fillcolor=color))
+
+                edge = pydot.Edge(hash(node), hash(child), label="X" if child.is_pruned() else "")
                 graph.add_edge(edge)
 
-        # graph.write_png('../assets/test.png')
-        # img = Image.open('../assets/test.png')
-        # img.show()
+
+        graph.write_png('../assets/test.png')
+        img = Image.open('../assets/test.png')
+        img.show()
 
 # data to test the tree printer
 # root = Node(Node(1))
