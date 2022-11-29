@@ -6,6 +6,7 @@ from src.Heuristic1 import Heuristic1
 from src.Heuristic2 import Heuristic2
 from src.final_score import final_score
 import easygui
+import timeit
 
 
 class Controller(object):
@@ -18,7 +19,7 @@ class Controller(object):
         self.Minimax = self.take_minimax(self.Heuristic)
         self.max_depth = self.take_max_depth()
         self.GUI = GUI()
-        # self.TreePrinting = TreePrinting()
+        self.TreePrinting = TreePrinting()
 
     def take_heuristic(self):
         inp = easygui.buttonbox(
@@ -61,9 +62,14 @@ class Controller(object):
         if self.current_turn:
             column_number = self.get_user_move()
         else:
+            start = timeit.default_timer()
             agent = self.get_agent_move()
+            stop = timeit.default_timer()
+            print('Time: ', stop - start)
+
             column_number = agent[0]
-            # self.TreePrinting.print_tree_console(agent[1])
+            self.TreePrinting.print_tree_console(agent[1])
+            self.TreePrinting.print_count()
             # self.TreePrinting.print_tree_gui(agent[1])
 
         self.current_turn = not self.current_turn

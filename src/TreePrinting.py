@@ -4,10 +4,11 @@ import pydot
 
 class TreePrinting:
 
+    count=0
     def print_tree_console(self, root, prefix="", children_prefix=""):
         if root is None:
             return
-
+        self.count+=1
         children = root.get_successor()
         print(prefix, root)
         for i in range(len(children)):
@@ -15,6 +16,8 @@ class TreePrinting:
                 self.print_tree_console(children[i], children_prefix + "├── ", children_prefix + "│   ")
             else:
                 self.print_tree_console(children[i], children_prefix + "└── ", children_prefix + "    ")
+    def print_count(self):
+        print(self.count)
 
     def print_tree_gui(self, root):
         graph = pydot.Dot('my_graph', graph_type='graph', bgcolor='white')
